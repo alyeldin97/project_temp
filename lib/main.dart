@@ -7,6 +7,8 @@ import 'inits.dart';
 import 'injection_container.dart';
 import 'my_app.dart';
 
+//! RUN flutter gen-l10n
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();

@@ -31,11 +31,11 @@ Future<void> initGetIt() async {
   );
 
   //! Hive Helpers
-  sl.registerFactory<HiveHelper>(() => HiveHelper(HiveConstants.onboarding),
+  sl.registerFactory<LocalStorageService>(() => HiveHelper(HiveConstants.onboarding),
       instanceName: HiveConstants.onboarding);
-  sl.registerFactory<HiveHelper>(() => HiveHelper(HiveConstants.language),
+  sl.registerFactory<LocalStorageService>(() => HiveHelper(HiveConstants.language),
       instanceName: HiveConstants.language);
-  sl.registerFactory<HiveHelper>(() => HiveHelper(HiveConstants.user),
+  sl.registerFactory<LocalStorageService>(() => HiveHelper(HiveConstants.user),
       instanceName: HiveConstants.user);
   // ! Local data source
   sl.registerFactory<OnboardingLocalDataSource>(() =>

@@ -13,18 +13,24 @@ class NetWorkServiceErrorHandler {
         return AppFailures.thisNumberIsNotRegistered;
       case ApiErrorMessages.invalidOtp:
         return AppFailures.invalidOtp;
-      default:
-        return AppFailures.defaultFailure;
+      // case null:
+      //   return AppFailures.defaultFailure;
+      // default:
+      //   return Failure(code: 9999, messageEn: failureMessageFromBackEnd, messageAr: failureMessageFromBackEnd);
+    default:
+    return AppFailures.defaultFailure;
     }
   }
 
-  static convertExceptionsToFailure(exception) {
-    if (exception is Exception) {
-      if (exception is SocketException) {
+  static convertExceptionsToFailure(e) {
+    if (e is Exception) {
+      if (e is SocketException) {
         throw AppFailures.socketFailure;
       } else {
         throw AppFailures.defaultFailure;
       }
+    }else if(e is Failure){
+      return e;
     } else {
       throw AppFailures.defaultFailure;
     }

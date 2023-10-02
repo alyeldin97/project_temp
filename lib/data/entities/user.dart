@@ -18,6 +18,7 @@ class UserEntity {
   String id;
   String createdAt;
   String updatedAt;
+
   int V;
 
   UserEntity({

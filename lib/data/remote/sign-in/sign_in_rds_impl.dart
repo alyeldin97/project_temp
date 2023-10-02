@@ -25,10 +25,8 @@ class SignInRemoteDataSourceImpl implements SignInRemoteDataSource {
       });
 
       return UserEntity.fromJson(response);
-    } on Failure {
+    } catch (error) {
       rethrow;
-    } catch (exception) {
-      throw NetWorkServiceErrorHandler.convertExceptionsToFailure(exception);
     }
   }
 

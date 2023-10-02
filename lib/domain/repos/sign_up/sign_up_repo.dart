@@ -4,6 +4,7 @@ import '../../../data/entities/user.dart';
 import '../../../data/local/user/user_lds.dart';
 import '../../../data/remote/sign_up/sign_up_rds.dart';
 import '../../../helpers/failures.dart';
+import '../../../helpers/network_error_helper.dart';
 import '../../models/user.dart';
 
 abstract class SignUpRepo {
@@ -52,8 +53,8 @@ class SignUpRepoImpl implements SignUpRepo {
       AppGlobalData.CURRENT_USER = userModel;
 
       return right(userModel);
-    } on Failure catch (failure) {
-      return left(failure);
+    }catch(e){
+      return left(NetWorkServiceErrorHandler.convertExceptionsToFailure(e));
     }
   }
 }

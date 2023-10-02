@@ -1,6 +1,16 @@
 import 'package:hive/hive.dart';
 
-class HiveHelper {
+
+
+abstract class LocalStorageService{
+  Future<dynamic> get(boxName, {index, key});
+  Future<dynamic> add(boxName, {index, key});
+  Future<dynamic> update(boxName,value, {index, key});
+  Future<dynamic> delete(boxName, {index, key});
+  Future<bool> checkIfExists(key);
+}
+
+ class HiveHelper implements LocalStorageService {
   String boxName;
   HiveHelper(this.boxName);
 

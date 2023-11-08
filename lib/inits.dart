@@ -13,19 +13,19 @@ class Inits {
   static Future initHive() async {
     await Hive.initFlutter();
     Hive.registerAdapter(UserModelAdapter());
-    await HiveHelper(HiveConstants.onboarding).openBox();
-    await HiveHelper(HiveConstants.language).openBox();
-    await HiveHelper(HiveConstants.user).openBox();
+    await LocalStorageService(HiveConstants.onboarding).openBox();
+    await LocalStorageService(HiveConstants.language).openBox();
+    await LocalStorageService(HiveConstants.user).openBox();
   }
 
   static getCachedData() async {
-    String cachedLanguage = await HiveHelper(HiveConstants.language)
+    String cachedLanguage = await LocalStorageService(HiveConstants.language)
             .getWithKey(HiveConstants.language) ??
         '';
     AppGlobalData.LANG = cachedLanguage;
 
-    UserModel? cachedUser =
-        await HiveHelper(HiveConstants.user).getWithKey(HiveConstants.user);
+    UserModel? cachedUser = await LocalStorageService(HiveConstants.user)
+        .getWithKey(HiveConstants.user);
 
     AppGlobalData.CURRENT_USER = cachedUser;
   }

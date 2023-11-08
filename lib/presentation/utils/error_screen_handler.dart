@@ -6,6 +6,7 @@ Function() handleErrorScreen(BuildContext context, Screens screen,
     {arguments}) {
   switch (screen) {
     case Screens.home:
+
     default:
       return () {};
   }

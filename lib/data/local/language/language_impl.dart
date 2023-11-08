@@ -5,21 +5,22 @@ import '../../../helpers/failures.dart';
 import '../../../helpers/hive_helper.dart';
 
 class LanguageLocalDataSourceImpl implements LanguageLocalDataSource {
-  HiveHelper hiveHelper;
+  LocalStorageService localStorageService;
   LanguageLocalDataSourceImpl(
-    this.hiveHelper,
+    this.localStorageService,
   );
 
   @override
   Future cacheLanguage(String language) async {
     try {
-      bool exists = await hiveHelper.checkIfExists(HiveConstants.language);
+      bool exists =
+          await localStorageService.checkIfExists(HiveConstants.language);
       if (exists) {
-        await hiveHelper.delete(HiveConstants.language,
+        await localStorageService.delete(HiveConstants.language,
             key: HiveConstants.language);
       }
 
-      await hiveHelper.add(language, key: HiveConstants.language);
+      await localStorageService.add(language, key: HiveConstants.language);
 
       return;
     } catch (e) {
@@ -31,7 +32,7 @@ class LanguageLocalDataSourceImpl implements LanguageLocalDataSource {
   Future<String> getCachedLanguage() async {
     try {
       String cachedLanguage =
-          await hiveHelper.getWithKey(HiveConstants.language) ?? '';
+          await localStorageService.getWithKey(HiveConstants.language) ?? '';
       return cachedLanguage;
     } catch (e) {
       throw AppFailures.defaultFailure;

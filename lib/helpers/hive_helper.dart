@@ -1,8 +1,8 @@
 import 'package:hive/hive.dart';
 
-class HiveHelper<T> {
+class LocalStorageService<T> {
   String boxName;
-  HiveHelper(this.boxName);
+  LocalStorageService(this.boxName);
   late Box<T> box;
 
   openBox() async {

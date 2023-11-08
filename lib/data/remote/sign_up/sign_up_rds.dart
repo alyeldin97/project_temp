@@ -41,10 +41,8 @@ class SignUpRemoteDataSourceImpl implements SignUpRemoteDataSource {
       });
 
       return UserEntity.fromJson(response);
-    } on Failure {
+    } catch (error) {
       rethrow;
-    } catch (exception) {
-      throw NetWorkServiceErrorHandler.convertExceptionsToFailure(exception);
     }
   }
 }

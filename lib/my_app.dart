@@ -6,7 +6,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:project_template/presentation/utils/colors.dart';
 import 'package:project_template/presentation/utils/routes.dart';
-
 import 'application/global/global_cubit.dart';
 import 'application/login/sign_in_cubit.dart';
 import 'application/onboarding/onboarding_cubit.dart';

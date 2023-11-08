@@ -33,15 +33,15 @@ Future<void> initGetIt() async {
 
   //! Hive Helpers
 
-  sl.registerSingleton<HiveHelper<String>>(
-      HiveHelper<String>(HiveConstants.language),
+  sl.registerSingleton<LocalStorageService<String>>(
+      LocalStorageService<String>(HiveConstants.language),
       instanceName: HiveConstants.language);
-  sl.registerSingleton<HiveHelper<String>>(
-      HiveHelper<String>(HiveConstants.onboarding),
+  sl.registerSingleton<LocalStorageService<String>>(
+      LocalStorageService<String>(HiveConstants.onboarding),
       instanceName: HiveConstants.onboarding);
 
-  sl.registerSingleton<HiveHelper<UserModel>>(
-      HiveHelper<UserModel>(HiveConstants.user),
+  sl.registerSingleton<LocalStorageService<UserModel>>(
+      LocalStorageService<UserModel>(HiveConstants.user),
       instanceName: HiveConstants.user);
 
   // ! Local data source

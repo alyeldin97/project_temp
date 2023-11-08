@@ -6,13 +6,13 @@ import '../../../helpers/failures.dart';
 import '../../../helpers/hive_helper.dart';
 
 class UserLocalDataSourceImpl implements UserLocalDataSource {
-  HiveHelper hiveHelper;
-  UserLocalDataSourceImpl(this.hiveHelper);
+  LocalStorageService localStorageService;
+  UserLocalDataSourceImpl(this.localStorageService);
 
   @override
   Future cacheUser(UserModel userModel) async {
     try {
-      await hiveHelper.add(userModel, key: HiveConstants.user);
+      await localStorageService.add(userModel, key: HiveConstants.user);
     } catch (e) {
       throw AppFailures.defaultFailure;
     }
@@ -23,7 +23,8 @@ class UserLocalDataSourceImpl implements UserLocalDataSource {
     try {
       bool customerExists = await checkCachedCustomer();
       if (customerExists) {
-        UserModel customer = await hiveHelper.getWithKey(HiveConstants.user);
+        UserModel customer =
+            await localStorageService.getWithKey(HiveConstants.user);
         return customer;
       } else {
         throw AppFailures.defaultFailure;
@@ -35,11 +36,11 @@ class UserLocalDataSourceImpl implements UserLocalDataSource {
 
   @override
   Future<bool> checkCachedCustomer() {
-    return hiveHelper.checkIfExists(HiveConstants.user);
+    return localStorageService.checkIfExists(HiveConstants.user);
   }
 
   @override
   Future deleteCachedCustomer() async {
-    return await hiveHelper.delete(HiveConstants.user);
+    return await localStorageService.delete(HiveConstants.user);
   }
 }

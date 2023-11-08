@@ -21,20 +21,12 @@ abstract class NetworkService {
 class NetworkServiceImpl implements NetworkService {
   @override
   Future<dynamic> getRequest(url) async {
-    log(AppGlobalData.ACCESS_TOKEN.toString());
-
-    // if (DateTime.now()
-    //         .difference(AppGlobalData.CURRENT_USER!.tokenIssuingTime)
-    //         .inMinutes >=
-    //     14) {
-
+    Failure failure = AppFailures.defaultFailure;
     try {
       var headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization':
-            // 'Bearer ${await HiveHelper(HiveConstants.accessToken).getWithKey(HiveConstants.accessToken)}'
-            'Bearer ${AppGlobalData.ACCESS_TOKEN}'
+        'Authorization': 'Bearer {AppGlobalData.ACCESS_TOKEN}'
       };
       http.Response response = await http.get(Uri.parse(url), headers: headers);
 
@@ -47,14 +39,9 @@ class NetworkServiceImpl implements NetworkService {
         log(response.statusCode.toString());
         log(response.body.toString());
         Map errorBody = jsonDecode(response.body);
-        String key = errorBody.entries.first.key;
-        String message = errorBody[key];
-        int statusCode = response.statusCode;
-        Failure failure =
-            Failure(code: statusCode, messageEn: message, messageAr: message);
-        // String failureMessage = jsonDecode(response.body)[JsonKeys.message];
-        // Failure failure = NetWorkServiceErrorHandler.convertApiErrorsToFailures(
-        // failureMessage);
+        String? failureMessage = errorBody[JsonKeys.message];
+        failure = NetWorkServiceErrorHandler.convertApiErrorsToFailures(
+            failureMessage);
         throw failure;
       }
     } catch (e) {
@@ -80,24 +67,16 @@ class NetworkServiceImpl implements NetworkService {
       if (isSuccess) {
         log(response.body.toString());
         return jsonDecode(response.body) ?? {} as Map<String, dynamic>;
-      } else {
-        // log(response.body.toString());
-        // String failureMessage = jsonDecode(response.body)[JsonKeys.message];
-        // failure = NetWorkServiceErrorHandler.convertApiErrorsToFailures(
-        //     failureMessage);
+      }else {
         log(response.statusCode.toString());
         log(response.body.toString());
-
         Map errorBody = jsonDecode(response.body);
-        String key = errorBody.entries.first.key;
-        String message = errorBody[key];
-        int statusCode = response.statusCode;
-        Failure failure =
-            Failure(code: statusCode, messageEn: message, messageAr: message);
+        String? failureMessage = errorBody[JsonKeys.message];
+        failure = NetWorkServiceErrorHandler.convertApiErrorsToFailures(
+            failureMessage);
         throw failure;
       }
     } catch (e) {
-      log(e.toString());
       rethrow;
     }
   }

@@ -8,6 +8,7 @@ import 'package:project_template/helpers/app_global_data.dart';
 import '../../../data/entities/user.dart';
 import '../../../data/remote/sign-in/sign_in_rds.dart';
 import '../../../helpers/failures.dart';
+import '../../../helpers/network_error_helper.dart';
 import '../../models/user.dart';
 
 class SignInRepoImpl implements SignInRepo {
@@ -31,8 +32,14 @@ class SignInRepoImpl implements SignInRepo {
       cache ? userLocalDataSource.cacheUser(userModel) : null;
 
       return right(userModel);
-    } on Failure catch (failure) {
+    }catch(e){
+      return left(NetWorkServiceErrorHandler.convertExceptionsToFailure(e));
+    }
+
+
+    on Failure catch (failure) {
       return left(failure);
     }
+
   }
 }

@@ -1,18 +1,16 @@
 import 'package:hive/hive.dart';
 
-class HiveHelper {
+class HiveHelper<T> {
   String boxName;
   HiveHelper(this.boxName);
+  late Box<T> box;
 
-  Future<Box> openBox() async {
-    return await Hive.openBox(boxName);
+  openBox() async {
+    box = await Hive.openBox<T>(boxName);
   }
 
   Future<void> add(value, {key, index}) async {
-    bool isClosed = !Hive.box(boxName).isOpen;
-    if (isClosed) {
-      await openBox();
-    }
+    await openBox();
 
     if (key == null && index == null) {
       _addWithoutKeyOrIndex(value);
@@ -24,11 +22,8 @@ class HiveHelper {
   }
 
   Future<void> update(boxName, value, {key, index}) async {
-    bool isClosed = !Hive.box(boxName).isOpen;
+    await openBox();
 
-    if (isClosed) {
-      await openBox();
-    }
     if (key != null) {
       _updateWithKey(value, key);
     } else {
@@ -36,27 +31,9 @@ class HiveHelper {
     }
   }
 
-  Future<dynamic> get(boxName, {index, key}) async {
-    bool isClosed = !Hive.box(boxName).isOpen;
+  Future delete(boxName, {index, key}) async {
+    await openBox();
 
-    if (isClosed) {
-      await openBox();
-    }
-    if (key != null) {
-      return getWithKey(key);
-    } else if (index != null) {
-      return getWithIndex(index);
-    } else {
-      return getAll();
-    }
-  }
-
-  Future<dynamic> delete(boxName, {index, key}) async {
-    bool isClosed = !Hive.box(boxName).isOpen;
-
-    if (isClosed) {
-      await Hive.openBox(boxName);
-    }
     if (key != null) {
       await deleteWithKey(key);
     } else if (index != null) {
@@ -67,11 +44,9 @@ class HiveHelper {
   }
 
   Future<bool> checkIfExists(key) async {
-    bool isClosed = !Hive.box(boxName).isOpen;
+    await openBox();
 
-    isClosed ? await openBox() : null;
-
-    dynamic data = await getWithKey(key);
+    T? data = await getWithKey(key);
     if (data == null) {
       return false;
     } else {
@@ -80,46 +55,68 @@ class HiveHelper {
   }
 
   Future<void> _addWithoutKeyOrIndex(value) async {
-    Hive.box(boxName).add(value);
+    await openBox();
+
+    box.add(value);
   }
 
   Future<void> _addWithKey(value, key) async {
-    Hive.box(boxName).put(key, value);
+    await openBox();
+
+    box.put(key, value);
   }
 
   Future<void> _addToIndex(value, index) async {
-    Hive.box(boxName).putAt(index, value);
+    await openBox();
+
+    box.putAt(index, value);
   }
 
   Future<void> _updateWithKey(value, key) async {
-    Hive.box(boxName).put(key, value);
+    await openBox();
+
+    box.put(key, value);
   }
 
   Future<void> _updateAtIndex(value, index) async {
-    Hive.box(boxName).putAt(index, value);
+    await openBox();
+
+    box.putAt(index, value);
   }
 
-  Future<dynamic> getAll() async {
-    return Hive.box(boxName).values.toList();
+  Future<List<T>> getAll() async {
+    await openBox();
+
+    return box.values.toList();
   }
 
-  Future<dynamic> getWithKey(key) async {
-    return Hive.box(boxName).get(key);
+  Future<T?> getWithKey(key) async {
+    await openBox();
+
+    return box.get(key);
   }
 
-  Future<dynamic> getWithIndex(index) async {
-    return Hive.box(boxName).getAt(index);
+  Future getWithIndex(index) async {
+    await openBox();
+
+    return box.getAt(index);
   }
 
-  Future<dynamic> deleteAll() async {
-    return Hive.box(boxName).clear();
+  Future deleteAll() async {
+    await openBox();
+
+    return box.clear();
   }
 
-  Future<dynamic> deleteWithKey(key) async {
-    return Hive.box(boxName).delete(key);
+  Future deleteWithKey(key) async {
+    await openBox();
+
+    return await box.delete(key);
   }
 
-  Future<dynamic> deleteWithIndex(index) async {
-    return Hive.box(boxName).deleteAt(index);
+  Future deleteWithIndex(index) async {
+    await openBox();
+
+    return await box.deleteAt(index);
   }
 }

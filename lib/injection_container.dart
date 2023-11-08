@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:project_template/domain/models/user.dart';
 
 import 'application/global/global_cubit.dart';
 import 'application/login/sign_in_cubit.dart';
@@ -31,12 +32,18 @@ Future<void> initGetIt() async {
   );
 
   //! Hive Helpers
-  sl.registerFactory<HiveHelper>(() => HiveHelper(HiveConstants.onboarding),
-      instanceName: HiveConstants.onboarding);
-  sl.registerFactory<HiveHelper>(() => HiveHelper(HiveConstants.language),
+
+  sl.registerSingleton<HiveHelper<String>>(
+      HiveHelper<String>(HiveConstants.language),
       instanceName: HiveConstants.language);
-  sl.registerFactory<HiveHelper>(() => HiveHelper(HiveConstants.user),
+  sl.registerSingleton<HiveHelper<String>>(
+      HiveHelper<String>(HiveConstants.onboarding),
+      instanceName: HiveConstants.onboarding);
+
+  sl.registerSingleton<HiveHelper<UserModel>>(
+      HiveHelper<UserModel>(HiveConstants.user),
       instanceName: HiveConstants.user);
+
   // ! Local data source
   sl.registerFactory<OnboardingLocalDataSource>(() =>
       OnboardingLocalDataSourceImpl(
